@@ -1,7 +1,7 @@
 # @overhead/orbit
 
 Orbit propagation and visible-pass prediction from real orbital elements in CCSDS OMM form
-(as published by CelesTrak), for the overhead space-awareness app. Pure functions: no network,
+(as published by CelesTrak), for the overhead24 space-awareness app. Pure functions: no network,
 no I/O, safe in browsers and Web Workers.
 
 - **Input is OMM, never TLE.** The 5-digit catalogue ran out on 2026-07-11; objects numbered
