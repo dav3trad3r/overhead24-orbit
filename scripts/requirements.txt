@@ -1,0 +1,5 @@
+# Independent reference implementations used to generate test fixtures (not runtime deps).
+jplephem==2.24
+numpy==2.5.4
+sgp4==2.27
+skyfield==1.55

@@ -88,3 +88,15 @@ export function ommEpochIso(epoch: string): string {
 export function ommEpochDate(epoch: string): Date {
   return new Date(ommEpochIso(epoch));
 }
+
+/**
+ * Returns the OMM EPOCH as Unix milliseconds INCLUDING the sub-millisecond fraction.
+ * CelesTrak epochs carry microseconds; a JS Date would drop them, which for a low-orbit object
+ * moving at ~7.7 km/s means up to ~7.7 m of along-track error.
+ */
+export function ommEpochMs(epoch: string): number {
+  const iso = ommEpochIso(epoch);
+  const whole = Date.parse(`${iso.slice(0, 19)}Z`);
+  const fraction = iso.length > 20 ? Number(`0${iso.slice(19, -1)}`) : 0;
+  return whole + fraction * 1000;
+}
