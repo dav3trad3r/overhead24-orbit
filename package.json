@@ -1,0 +1,30 @@
+{
+  "name": "@overhead/orbit",
+  "version": "0.1.0",
+  "description": "SGP4 orbit propagation and visible-pass prediction from OMM orbital elements",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "5.0.5"
+  }
+}
