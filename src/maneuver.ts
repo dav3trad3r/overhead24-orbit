@@ -124,3 +124,25 @@ export function maneuverSize(change: ElementSetChange): 'small' | 'large' | null
   const any = (t.aKm !== null && da >= t.aKm) || di >= t.iDeg;
   return any ? 'small' : null;
 }
+
+/**
+ * Whether a change persisted: `later` (the older set against a later one) is also beyond the
+ * threshold in the same direction, in orbit size or in tilt, as `first` was. A one-off poor fit
+ * doesn't persist; a real manoeuvre does.
+ */
+export function changePersists(
+  first: Pick<ElementSetChange, 'deltaAKm' | 'deltaIDeg'>,
+  later: ElementSetChange,
+): boolean {
+  const t = MANEUVER_THRESHOLDS[later.regime];
+  const sizeHolds =
+    t.aKm !== null &&
+    Math.abs(first.deltaAKm) >= t.aKm &&
+    Math.abs(later.deltaAKm) >= t.aKm &&
+    Math.sign(first.deltaAKm) === Math.sign(later.deltaAKm);
+  const tiltHolds =
+    Math.abs(first.deltaIDeg) >= t.iDeg &&
+    Math.abs(later.deltaIDeg) >= t.iDeg &&
+    Math.sign(first.deltaIDeg) === Math.sign(later.deltaIDeg);
+  return sizeHolds || tiltHolds;
+}
