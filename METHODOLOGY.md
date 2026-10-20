@@ -84,10 +84,12 @@ are fixed by orbits days ahead, so most clusters are coincidences of geometry.
 
 Per UTC day, for each country and conflict area: predicted passes (entries into the fighting
 cells by the rule above), minutes overhead and number of satellites. Week-on-week arrows compare
-the last 7 days with the 7 before and appear only from a 10% and 5-pass change, because ground
-tracks repeat over several days and weeks differ a little on their own. Each change names the
-satellites behind it: newly launched (in the fortnight), moved in or out after an orbit change,
-or no longer working; otherwise "the same satellites: orbit timing". The days before coverage
+the last 7 days with the 7 before, on at least 35 passes in the earlier week. Each change names
+the satellites behind it: newly launched (in the fortnight), moved in or out after an orbit
+change, or no longer working. With such a cause, an arrow shows from a 10% (and 5-pass) change.
+Without one it needs 35%, because ground tracks repeat over several days and weeks differ on
+their own: with the same satellites both weeks, the change was 4% typically and 32% at most
+(measured 20 Oct 2026 over every country and area with at least five passes a day). The days before coverage
 went live (20 Oct 2026) were worked out from each satellite's own past elements, leaving out any
 day where under 95% of the satellites then in orbit had elements under a week old.
 
