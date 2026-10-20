@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "description": "SGP4 orbit propagation and visible-pass prediction from OMM orbital elements",
   "license": "AGPL-3.0-only",
+  "homepage": "https://overhead24.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dav3trad3r/overhead24-orbit.git"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
   "type": "module",
   "exports": {
     ".": {
