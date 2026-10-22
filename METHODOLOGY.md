@@ -38,10 +38,14 @@ satellite is at least 10° up, in sunlight, and the Sun is at least 6° below th
 - **Staying close:** pairs within 100 km now that stay within 200 km for 24 hours either side.
 - **Passing close:** closest approaches under 5 km in the next 6 hours, screened every 10 s and
   refined. Shown in distance bands, never as exact misses.
-- **Closing in (military):** a military satellite and another object in nearly the same orbit
-  (planes within 1°, semi-major axes within 100 km, now within 200 km in low orbit or 500 km
-  higher), whose separation falls by at least 40 km across the day before and after. Distances
-  use the current elements for all three samples, so the trend is "on present orbits".
+- **Closing in (military and unclassified):** a watched satellite and another object in nearly
+  the same orbit (planes within 1°, semi-major axes within 100 km, now within 200 km in low orbit
+  or 500 km higher), whose separation falls by at least 40 km across the day before and after.
+  Distances use the current elements for all three samples, so the trend is "on present orbits".
+  Watched satellites are those GCAT classes as military, plus working satellites GCAT hasn't
+  classified yet (mostly recent launches; Starlink and rocket bodies left out), whose purpose
+  isn't known. Pairs from the same launch are skipped, so a batch spreading out after deployment
+  doesn't count.
 
 ## Orbit changes (manoeuvres)
 
