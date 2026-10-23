@@ -46,6 +46,17 @@ satellite is at least 10° up, in sunlight, and the Sun is at least 6° below th
   classified yet (mostly recent launches; Starlink and rocket bodies left out), whose purpose
   isn't known. Pairs from the same launch are skipped, so a batch spreading out after deployment
   doesn't count.
+- **Closest-approach forecast (approaching pairs):** whenever either satellite of an approaching
+  pair gets a new element set, the closest approach in the next 7 days is worked out again:
+  scanned every 20 s, refined to about a millisecond, and split into radial, in-track and
+  cross-track offsets in the second satellite's frame, with the relative speed. Co-orbital pairs
+  pass through two near-equal minima per orbit, where their planes cross, so the next-closest is
+  kept too. Each forecast is stored with the two element-set epochs it used, so the history shows
+  how the prediction moves as tracking comes in. Pairs are followed until a day after the pass;
+  after it, the window opens 12 hours before the last predicted closest approach, so post-pass
+  element sets re-measure the pass. Who is catching whom comes from the along-track gap now and a
+  day later, and from which satellite is lower (and so faster). Public element sets carry no
+  uncertainty, so these are predicted distances, not collision probabilities.
 
 ## Orbit changes (manoeuvres)
 

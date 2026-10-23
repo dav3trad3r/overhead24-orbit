@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 export * from './above.js';
 export * from './approaching.js';
+export * from './encounter.js';
 export * from './maneuver.js';
 export * from './observer.js';
 export * from './omm.js';
