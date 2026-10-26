@@ -34,7 +34,7 @@ clusters, coverage, geostationary moves, breakups, activity baselines) is writte
 | `PassScreener`, `screenPassing(...)` | Closest approaches under a miss distance in the coming hours |
 | `screenApproaching(sats, atMs, opts)` | Watched objects in nearly the same orbit as another, getting closer |
 | `compareElementSets(prev, next)` | How a newer element set differs from the older one propagated to it |
-| `maneuverSize(change)`, `changePersists(...)` | Whether a change is a manoeuvre (small or large), and confirmed by the next set |
+| `maneuverSize(change)`, `changePersists(...)` | Whether a change is a manoeuvre (small or large), and confirmed by the next set; lowerings under 300 km perigee (drag) and orbits beyond geostationary are not |
 
 "Visible" means: at least 10° up, sunlit (the Sun's centre visible from the satellite), with
 the Sun at least 6° below the observer's horizon. All three are options.

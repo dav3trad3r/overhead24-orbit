@@ -78,11 +78,26 @@ poor fit is never reported. Starlink is left out (it adjusts almost continuously
 in very low orbits (under ~350 km) re-boost every day or two against drag: those show as frequent
 small orbit raises and are routine.
 
+Two kinds of change are never reported (since 26 Oct 2026):
+
+- **A lowering with perigee under 300 km and no tilt change.** Drag there grows faster than the
+  older element set predicts as an object falls, so the orbit drops more than expected without
+  any burn. Every such case among the 4,236 detections stored by then was a satellite coming
+  down (YAOGAN-35 02B four times in its last week, COSMOS 2572 nine times, cubesats like
+  IPERDRONE.0). Raises and tilt changes at those heights are still burns, and still reported.
+- **Anything in an orbit beyond geostationary** (period over 1,600 minutes). Out there the Moon
+  and Sun move orbits more between updates than the thresholds allow: the four MMS spacecraft
+  "changed tilt" together on four days in one week, as did the long-dead VELA 6.
+
 ## Public tracking stopped ("gone dark")
 
 A satellite whose newest public element set is older than three times its usual update gap
-(at least 72 hours; 7 days when the gap isn't known yet), or that dropped out of the public
-download for 12 hours or more. This is about public tracking data only: it says nothing about
+and at least 7 days old, once it has had 3 real updates to learn that gap from, or that dropped
+out of the public download for 12 hours or more. Space-Track's updates come in bursts: replaying
+2,510 objects' real histories, a 72-hour floor would have flagged about 25 objects a day that
+then updated as normal; a week brings that to about 3. When many objects of one kind of orbit
+cross the line together (10 or more, or 1% of them, within 72 hours), that is a gap in the
+public feed, not news, and none of them is flagged. This is about public tracking data only: it says nothing about
 radio contact. Only working satellites count as news.
 
 ## Conflict-zone clusters
@@ -133,6 +148,19 @@ its usual week, and at least 3 standard deviations (Poisson) above it**, where "
 days before. No country is judged until its normal has 28 days of counts; each count starts on
 the first day its input was complete (orbit changes from the element history, the rest from the
 day they were first counted).
+
+## The week in orbit
+
+Once a week (Monday to Sunday, UTC) is over, its detections are counted by fixed rules: military
+satellites that changed orbit, by day and by country; the largest single change in orbit size
+(highly elliptical orbits are left out, since only their tilt is judged); geostationary moves,
+launches and re-entries. The week is built again at 22:00 UTC on the Monday, because an orbit
+change is only confirmed by the next element set, up to a day later.
+
+A pair **closed in all week** when it was found closing on **4 or more days**, was **never more
+than 5% further apart than the day before**, and was **at least 10% nearer at the end** than at
+the start. Old satellites with sparse updates can look closer one day and further the next as
+their orbits are refitted; those don't count.
 
 ## Corrections
 
