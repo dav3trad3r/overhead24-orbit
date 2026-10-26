@@ -2,6 +2,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   compareElementSets,
+  DEEP_PERIOD_MIN,
+  DRAG_PERIGEE_KM,
   MANEUVER_THRESHOLDS,
   maneuverSize,
   type Omm,
@@ -53,6 +55,24 @@ describe('compareElementSets / maneuverSize', () => {
     expect(c.regime).toBe('HEO');
     expect(Math.abs(c.deltaAKm)).toBeGreaterThan(100);
     expect(maneuverSize(c)).toBeNull();
+  });
+
+  it('leaves lowerings under 300 km perigee to drag, but still flags raises and tilt there', () => {
+    // QIANFAN-196's real change, moved down to where YAOGAN-35 02B was falling (~190 km).
+    const c = { ...change('QIANFAN-196'), perigeeKm: 190 };
+    expect(maneuverSize({ ...c, deltaAKm: -4.2, deltaIDeg: 0 })).toBeNull();
+    expect(maneuverSize({ ...c, deltaAKm: 0.7, deltaIDeg: 0 })).toBe('small');
+    expect(maneuverSize({ ...c, deltaAKm: -4.2, deltaIDeg: 0.02 })).toBe('small');
+    expect(maneuverSize({ ...c, perigeeKm: 336, deltaAKm: -13.2 })).toBe('large');
+    expect(change('QIANFAN-196').perigeeKm).toBeGreaterThan(DRAG_PERIGEE_KM);
+  });
+
+  it('judges nothing beyond geostationary orbit (VELA 6, MMS)', () => {
+    const mms = change('MMS 1');
+    expect(mms.periodMin).toBeGreaterThan(DEEP_PERIOD_MIN);
+    expect(maneuverSize({ ...mms, deltaIDeg: 0.058 })).toBeNull();
+    const geo = change("ES'HAIL 1");
+    expect(geo.periodMin).toBeLessThan(DEEP_PERIOD_MIN);
   });
 
   it('only compares a newer set with an older one', () => {

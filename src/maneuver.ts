@@ -13,6 +13,15 @@
  *   HEO                 semi-major axis swings by up to ~190 km on SDP4 refits; only tilt is used
  * Starlink satellites adjust their orbits almost continuously (99th percentile 1.4 km), so callers
  * should leave them out rather than report a stream of routine burns.
+ *
+ * Two kinds of change are never reported (26 Oct 2026, from the 4,236 stored detections):
+ *   - a lowering with perigee under 300 km and no tilt change. Drag there grows faster than the
+ *     older set predicts as an object falls, so every one logged was a satellite coming down
+ *     (YAOGAN-35 02B four times in its last week, COSMOS 2572 nine times, cubesats like
+ *     IPERDRONE.0); raises and tilt changes there are still burns.
+ *   - anything in an orbit beyond geostationary (period over 1,600 minutes). The Moon and Sun bend
+ *     those orbits more between updates than the thresholds allow: the four MMS spacecraft
+ *     "changed tilt" together on 20, 21, 23 and 24 Oct, as did VELA 6.
  */
 import { temeAtMinutes, type Vec3 } from './propagate.js';
 import type { Satellite } from './satellite.js';
@@ -25,6 +34,9 @@ export interface ElementSetChange {
   regime: ManeuverRegime;
   /** Hours between the two epochs. */
   hours: number;
+  /** The newer set's perigee height (km) and period (minutes). */
+  perigeeKm: number;
+  periodMin: number;
   /** Change in semi-major axis, less the drag drift the older set predicts (km). */
   deltaAKm: number;
   /** Change in inclination (degrees). */
@@ -57,6 +69,11 @@ export const MANEUVER_MAX_GAP_HOURS = 240;
 
 /** WGS-72 Earth radius, the unit of satellite.js's semi-major axis. */
 const RE_KM = 6378.135;
+
+/** Below this perigee a lowering can't be told apart from drag (km). */
+export const DRAG_PERIGEE_KM = 300;
+/** Orbits with a longer period than this (beyond geostationary) aren't judged (minutes). */
+export const DEEP_PERIOD_MIN = 1600;
 
 export function maneuverRegime(sat: Satellite): ManeuverRegime {
   const periodMin = 1440 / sat.omm.MEAN_MOTION;
@@ -105,6 +122,8 @@ export function compareElementSets(prev: Satellite, next: Satellite): ElementSet
     noradCatId: next.noradCatId,
     regime: maneuverRegime(next),
     hours,
+    perigeeKm: next.satrec.a * RE_KM * (1 - next.omm.ECCENTRICITY) - RE_KM,
+    periodMin: 1440 / next.omm.MEAN_MOTION,
     deltaAKm: (next.satrec.a - prev.satrec.a) * RE_KM - expectedDaKm,
     deltaIDeg: next.omm.INCLINATION - prev.omm.INCLINATION,
     residualKm: Math.hypot(d.x, d.y, d.z),
@@ -114,11 +133,16 @@ export function compareElementSets(prev: Satellite, next: Satellite): ElementSet
   };
 }
 
-/** 'large', 'small', or null when the change is within normal update-to-update noise. */
+/**
+ * 'large', 'small', or null when the change is within normal update-to-update noise, or is one
+ * that can't be told apart from drag or from the Moon and Sun (see the top of this file).
+ */
 export function maneuverSize(change: ElementSetChange): 'small' | 'large' | null {
   const t = MANEUVER_THRESHOLDS[change.regime];
   const da = Math.abs(change.deltaAKm);
   const di = Math.abs(change.deltaIDeg);
+  if (change.periodMin > DEEP_PERIOD_MIN) return null;
+  if (change.perigeeKm < DRAG_PERIGEE_KM && change.deltaAKm < 0 && di < t.iDeg) return null;
   const large = (t.largeAKm !== null && da >= t.largeAKm) || di >= t.largeIDeg;
   if (large) return 'large';
   const any = (t.aKm !== null && da >= t.aKm) || di >= t.iDeg;
